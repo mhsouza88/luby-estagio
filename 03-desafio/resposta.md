@@ -51,18 +51,22 @@ class MaquinaDeVendas {
   comprarProduto = (nomeProduto: string, valorPago: number): void => {
     const produto = this.produtos.get(nomeProduto);
     if (!produto) {
-      console.log("Produto não encontrado!");
+      console.log(
+        `Você tentou comprar ${nomeProduto}. Porém, esse produto não foi encontrado na máquina!`
+      );
       return;
     }
     if (produto.quantidade <= 0) {
-      console.log("Produto esgotado!");
+      console.log(
+        `Você tentou comprar ${nomeProduto}. Porém, esse produto está esgotado!`
+      );
       return;
     }
     if (valorPago < produto.preco) {
       console.log(
         `Valor insuficiente! Por favor, adicione mais R$${(
           produto.preco - valorPago
-        ).toFixed(2)}.`
+        ).toFixed(2)} para comprar ${produto.nome}.`
       );
       return;
     }
@@ -70,21 +74,40 @@ class MaquinaDeVendas {
     produto.quantidade--;
     this.vendas += produto.preco;
     const troco = valorPago - produto.preco;
-    console.log(`Comprou ${produto.nome}. Troco: R$${troco.toFixed(2)}`);
+    console.log(`\nComprou ${produto.nome}. Troco: R$${troco.toFixed(2)}`);
   };
 
   mostrarVendas = (): void => {
-    console.log(`\nTotal de Vendas: R$${this.vendas.toFixed(2)}`);
+    console.log(`Total de Vendas: R$${this.vendas.toFixed(2)}`);
   };
 }
 
-// Saídas desejadas ao comprar um produto
+// Adicionando produtos
 let maquina = new MaquinaDeVendas();
 maquina.adicionarProduto(new Produto("Sukita", 2.5, 10));
-maquina.adicionarProduto(new Produto("Pepsi", 2.0, 15));
+maquina.adicionarProduto(new Produto("Pepsi", 2.0, 1));
 
-// Mais algumas ações
+// Comprando produtos -- Teste de troco
 maquina.mostrarProdutos();
 maquina.comprarProduto("Sukita", 3.0);
+maquina.mostrarVendas();
+
+// Comprando produtos -- Teste de produto inexistente
+maquina.mostrarProdutos();
+maquina.comprarProduto("Fanta", 3.0);
+maquina.mostrarVendas();
+
+// Comprando produtos -- Teste de produto esgotado
+maquina.mostrarProdutos();
+maquina.comprarProduto("Pepsi", 2.0);
+maquina.mostrarVendas();
+
+maquina.mostrarProdutos();
+maquina.comprarProduto("Pepsi", 2.0);
+maquina.mostrarVendas();
+
+// Comprando produtos -- Teste de valor insuficiente
+maquina.mostrarProdutos();
+maquina.comprarProduto("Sukita", 2.0);
 maquina.mostrarVendas();
 ````
